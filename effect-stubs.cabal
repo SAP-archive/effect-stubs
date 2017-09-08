@@ -1,0 +1,69 @@
+name:                effect-stubs
+version:             0.0.1.0
+synopsis:            A library to effects that can be stubbed for unit testing
+description:         Please see README.md
+homepage:            https://github.com/SAP/effect-stubs#readme
+license:             Apache
+license-file:        LICENSE
+author:              Jan von Löwenstein
+maintainer:          jan.von.loewenstein@sap.com
+copyright:           2017 SAP SE
+category:            Effects
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  ghc-options:        -Wall
+  default-extensions:  OverloadedStrings
+                     , GeneralizedNewtypeDeriving
+  hs-source-dirs:      src
+  exposed-modules:     Control.Monad.Arguments
+                     , Control.Monad.Stub.Arguments
+                     , Control.Monad.Environment
+                     , Control.Monad.Stub.Environment
+                     , Control.Monad.Console
+                     , Control.Monad.Stub.Console
+                     , Control.Monad.FileSystem
+                     , Control.Monad.Stub.FileSystem
+                     , Control.Monad.Wait
+                     , Control.Monad.Stub.Wait
+                     , Control.Monad.Time
+                     , Control.Monad.Stub.Time
+                     , Control.Monad.Stub.StubMonad
+  build-depends:       base >= 4.7 && < 5
+                     , text
+                     , hourglass
+                     , hashable
+                     , bytestring
+                     , unordered-containers
+                     , lens
+                     , mtl
+                     , safe-exceptions
+  default-language:    Haskell2010
+
+test-suite unit
+  default-extensions:  OverloadedStrings
+                     , GeneralizedNewtypeDeriving
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  other-modules:       Control.Monad.WaitSpec
+                     , Control.Monad.TestSupport
+  main-is:             Spec.hs
+  build-depends:       base
+                     , hspec
+                     , effect-stubs
+                     , text
+                     , bytestring
+                     , hourglass
+                     , lens
+                     , unordered-containers
+                     , mtl
+                     , either
+                     , safe-exceptions
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/SAP/effect-stubs
