@@ -4,7 +4,7 @@
 
 This is a Haskell library to support stub based testing of side-effectfull code.
 
-You can see it in action on https://github.com/SAP/bosh-kubernetes-cpi-release/src/bosh-kubernetes-cpi/src/CPI/Kubernetes/Resource/Stub/ and https://github.com/SAP/bosh-kubernetes-cpi-release/src/bosh-kubernetes-cpi/test/stub.
+You can see it in action on https://github.com/SAP/bosh-kubernetes-cpi-release/tree/master/src/bosh-kubernetes-cpi/src/CPI/Kubernetes/Resource/Stub/ and https://github.com/SAP/bosh-kubernetes-cpi-release/tree/master/src/bosh-kubernetes-cpi/test/stub.
 
 #Requirements
 
