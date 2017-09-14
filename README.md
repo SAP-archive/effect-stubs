@@ -1,4 +1,26 @@
-# effect-stubs
+*This is not an offical SAP project*
+
+Description
+
+This is a Haskell library to support stub based testing of side-effectfull code.
+
+You can see it in action on https://github.com/SAP/bosh-kubernetes-cpi-release/src/bosh-kubernetes-cpi/src/CPI/Kubernetes/Resource/Stub/ and https://github.com/SAP/bosh-kubernetes-cpi-release/src/bosh-kubernetes-cpi/test/stub.
+
+Requirements
+
+This project uses [Haskell Stack](https://docs.haskellstack.org/en/stable/README/) for building
+
+Download and Installation
+
+The library is currently not published on https://hackage.org. However, you can include it as submodule and reference it as package with `extra-dep: true`.
+
+Known Issues
+
+Known issues will have a Github issue.
+
+How to obtain support
+
+This project is provided 'as-is'. However, bug reports as Github issues are welcome and will be worked on as time permits.
 
 Copyright and license
 ---------------------
