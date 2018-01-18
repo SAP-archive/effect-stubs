@@ -1,0 +1,63 @@
+name: effect-stubs
+version: '0.0.1.0'
+synopsis: A library to effects that can be stubbed for unit testing
+description: Please see README.md
+category: Effects
+author: Jan von Löwenstein
+maintainer: jan.von.loewenstein@sap.com
+copyright: 2017 SAP SE
+license: Apache
+github: SAP/effect-stubs
+default-extensions:
+- OverloadedStrings
+- GeneralizedNewtypeDeriving
+dependencies:
+- base >=4.7 && <5
+- text
+- hourglass
+- bytestring
+- unordered-containers
+- lens
+- mtl
+- transformers
+- transformers-base
+- monad-control
+- safe-exceptions
+library:
+  source-dirs: src
+  ghc-options: -Wall
+  exposed-modules:
+  - Control.Effect
+  - Control.Effect.Stub
+  - Control.Effect.IO.Arguments
+  - Control.Effect.Class.Arguments
+  - Control.Effect.Stub.Arguments
+  - Control.Effect.IO.Environment
+  - Control.Effect.Class.Environment
+  - Control.Effect.Stub.Environment
+  - Control.Effect.IO.Console
+  - Control.Effect.Class.Console
+  - Control.Effect.Stub.Console
+  - Control.Effect.IO.FileSystem
+  - Control.Effect.Class.FileSystem
+  - Control.Effect.Stub.FileSystem
+  - Control.Effect.IO.Wait
+  - Control.Effect.Class.Wait
+  - Control.Effect.Stub.Wait
+  - Control.Effect.IO.Time
+  - Control.Effect.Class.Time
+  - Control.Effect.Stub.Time
+  dependencies:
+  - hashable
+tests:
+  unit:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hspec
+    - effect-stubs
+    - either

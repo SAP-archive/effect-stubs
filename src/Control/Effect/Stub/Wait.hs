@@ -2,17 +2,17 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Control.Monad.Stub.Wait(
+module Control.Effect.Stub.Wait(
     HasWaitCount(..)
+  , wait
 ) where
 
 import           Control.Exception.Safe
 import           Control.Monad.State
-import           Control.Monad.Wait
 import           Control.Monad.Writer         hiding ((<>))
 
-import           Control.Monad.Stub.StubMonad
-import           Control.Monad.Stub.Time
+import Control.Effect.Stub.Monad
+import Control.Effect.Stub.Time
 
 import           Data.HashMap.Strict          as HashMap
 import           Data.HashMap.Strict          (HashMap)
@@ -23,7 +23,7 @@ class (Monoid a) => HasWaitCount a where
   asWaitCount :: TimeInterval i => i -> a
   asWaitCount = mempty
 
-instance (Monad m, MonadThrow m, Monoid w, HasWaitCount w, HasTime s, HasTimeline s) => MonadWait (StubT r s w m) where
-  wait n = do
-    tick n
-    tell $ asWaitCount n
+wait :: (Monad m, MonadThrow m, MonadWriter w m, HasWaitCount w, MonadState s m, MonadFakeTime s m, HasTimeline s, TimeInterval i) => i -> m ()
+wait n = do
+  tick n
+  tell $ asWaitCount n

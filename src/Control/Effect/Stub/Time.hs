@@ -3,8 +3,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE RankNTypes            #-}
 
-module Control.Monad.Stub.Time(
+module Control.Effect.Stub.Time(
     HasTime(..)
+  , currentTime
   , HasTimeline(..)
   , MonadFakeTime(..)
 ) where
@@ -13,14 +14,13 @@ import           Data.Hourglass
 import           Time.System
 import           Time.Types
 
-import           Control.Monad.Time
-
 import           Control.Monad.State
-import           Control.Monad.Stub.StubMonad
+
+import           Control.Effect.Stub.Monad
 
 import           Data.Hashable
-import           Data.HashMap.Strict          as HashMap
-import           Data.HashMap.Strict          (HashMap)
+import           Data.HashMap.Strict       as HashMap
+import           Data.HashMap.Strict       (HashMap)
 import           Data.Maybe
 
 class HasTime s where
@@ -29,8 +29,8 @@ class HasTime s where
   withTime :: (Elapsed -> Elapsed) -> s -> s
   withTime f s = s `updateTime` f (asTime s)
 
-instance (Monad m, Monoid w, HasTime s) => MonadTime (StubT r s w m) where
-  currentTime = gets asTime
+currentTime :: (Monad m, MonadState s m, HasTime s) => m Elapsed
+currentTime = gets asTime
 
 class HasTimeline s where
   asTimeline :: s -> HashMap Elapsed [s -> s]
@@ -44,7 +44,7 @@ instance Hashable Elapsed where
 class (MonadState s m) => MonadFakeTime s m where
   tick :: TimeInterval i => i -> m ()
 
-instance (Monad m, HasTime s, HasTimeline s, Monoid w) => MonadFakeTime s (StubT r s w m) where
+instance (Monad m, HasTime s, HasTimeline s, Monoid w) => MonadFakeTime s (StubT r w s m) where
   tick n = do
     current <- currentTime
     timeline <- gets asTimeline

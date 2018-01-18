@@ -3,7 +3,7 @@
 {-# LANGUAGE RankNTypes            #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 
-module Control.Monad.TestSupport(
+module Control.Effect.TestSupport(
     TestInput(..)
   , emptyTestInput
   , TestOutput(..)
@@ -13,27 +13,21 @@ module Control.Monad.TestSupport(
   , runEffects
 ) where
 
-import           Control.Monad.Stub.Arguments
-import           Control.Monad.Stub.Console
-import           Control.Monad.Stub.FileSystem
-import           Control.Monad.Stub.StubMonad
-import           Control.Monad.Stub.Time
-import           Control.Monad.Stub.Wait
+import           Control.Effect
+import           Control.Effect.Stub
 
 import           Control.Monad.Reader
-import           Control.Monad.Time
-import           Control.Monad.Wait
 import           Control.Monad.Writer
 import           Data.Maybe
 import           Data.Monoid
 
 import           Control.Exception.Safe
-import           Data.ByteString               (ByteString)
-import qualified Data.ByteString               as ByteString hiding (unpack)
-import           Data.HashMap.Strict           (HashMap)
-import qualified Data.HashMap.Strict           as HashMap
-import           Data.Hourglass
-import           Data.Text                     (Text)
+import           Data.ByteString        (ByteString)
+import qualified Data.ByteString        as ByteString hiding (unpack)
+import           Data.HashMap.Strict    (HashMap)
+import qualified Data.HashMap.Strict    as HashMap
+import           Data.Hourglass         (Elapsed, Seconds, toSeconds)
+import           Data.Text              (Text)
 import           System.Environment
 import           Test.Hspec
 
@@ -116,7 +110,7 @@ instance HasWaitCount TestOutput where
     waitCount = [toSeconds n]
   }
 
-type Effects a = (forall m. (MonadWait m, MonadTime m, MonadIO m) => m a)
+type Effects a = (forall m. (Wait m, Time m, MonadIO m) => m a)
 runEffects :: Effects a -> IO a
 runEffects f = do
   real <- read . fromMaybe "False" <$> lookupEnv "REAL_IO"

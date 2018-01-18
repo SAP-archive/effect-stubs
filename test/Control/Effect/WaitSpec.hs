@@ -1,24 +1,21 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module Control.Monad.WaitSpec(spec) where
+module Control.Effect.WaitSpec(spec) where
 
-import Control.Monad.Wait
-import Control.Monad.Time
-import Control.Monad.State
+import           Test.Hspec
+import Control.Effect.TestSupport
+
+import Control.Effect
+import Control.Effect.Stub
+
+import           Control.Monad.State
 
 import Data.Hourglass
 import qualified Data.HashMap.Strict as HashMap
-
-import Control.Monad.Stub.StubMonad
-import Control.Monad.Stub.Time
-import Control.Monad.TestSupport
-
-import           Test.Hspec
-
 import Data.Text (Text)
 
-runStubT' :: TestInput -> [a] -> StubT TestInput [a] TestOutput IO (Maybe Text) -> IO (Maybe Text, [a], TestOutput)
+runStubT' :: TestInput -> [a] -> StubT TestInput TestOutput [a] IO (Maybe Text) -> IO (Maybe Text, [a], TestOutput)
 runStubT' = runStubT
 
 instance HasTime [Text] where
@@ -30,7 +27,7 @@ instance HasTimeline [Text] where
   updateTimeline s _ = s
 
 spec :: Spec
-spec = describe "MonadWait" $ do
+spec = describe "Wait" $ do
   describe "wait" $ do
     it "should not continue before the specified amount of time passed" $ do
       void $ runEffects
@@ -91,4 +88,4 @@ spec = describe "MonadWait" $ do
         all (== 1) (waitCount output) `shouldBe` True
 
 timeout :: Selector Timeout
-timeout Timeout = True
+timeout (Timeout _) = True

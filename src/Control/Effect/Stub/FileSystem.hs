@@ -1,9 +1,9 @@
-module Control.Monad.Stub.FileSystem(
+module Control.Effect.Stub.FileSystem(
     HasFiles(..)
+  , readFile
 ) where
 
-import           Control.Monad.FileSystem
-import           Control.Monad.Stub.StubMonad
+import Prelude hiding (readFile)
 
 import           Control.Applicative
 import           Control.Monad.State
@@ -19,8 +19,8 @@ class HasFiles a where
   asFiles :: a -> HashMap Text ByteString
   asFiles = const HashMap.empty
 
-instance (Monad m, MonadThrow m, HasFiles s, Monoid w) => MonadFileSystem (StubT c s w m) where
-  readFile path = do
-    files <- gets asFiles
-    --TODO *** Exception: <path>: openFile: does not exist (No such file or directory)
-    pure $ fromJust $ path `HashMap.lookup` files
+readFile :: (Monad m, MonadThrow m, MonadState s m, HasFiles s) => Text -> m ByteString
+readFile path = do
+  files <- gets asFiles
+  --TODO *** Exception: <path>: openFile: does not exist (No such file or directory)
+  pure $ fromJust $ path `HashMap.lookup` files

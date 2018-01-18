@@ -1,9 +1,8 @@
-module Control.Monad.Stub.Environment(
+module Control.Effect.Stub.Environment(
     HasEnvironment(..)
+  , environment
 ) where
 
-import           Control.Monad.Environment
-import           Control.Monad.Stub.StubMonad
 
 import           Data.HashMap.Strict          (HashMap)
 import qualified Data.HashMap.Strict          as HashMap
@@ -18,5 +17,5 @@ class HasEnvironment a where
   asEnvironment :: a -> HashMap Text Text
   asEnvironment = const HashMap.empty
 
-instance (Monad m, MonadThrow m, Monoid w, HasEnvironment s) => MonadEnvironment (StubT c s w m) where
-  environment = gets asEnvironment
+environment :: (Monad m, MonadThrow m, MonadState s m, HasEnvironment s) => m (HashMap Text Text)
+environment = gets asEnvironment

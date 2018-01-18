@@ -1,15 +1,15 @@
-module Control.Monad.Stub.Console(
+module Control.Effect.Stub.Console(
     HasStdin(..)
+  , readStdin
   , HasStdout(..)
+  , writeStdout
   , HasStderr(..)
+  , writeStderr
 ) where
-
-import           Control.Monad.Stub.StubMonad
 
 import           Data.ByteString              (ByteString)
 
 import           Control.Exception.Safe
-import           Control.Monad.Console
 import           Control.Monad.Reader
 import           Control.Monad.State
 import           Control.Monad.Writer
@@ -26,7 +26,11 @@ class (Monoid a) => HasStderr a where
   asStderr :: ByteString -> a
   asStderr = mempty
 
-instance (Monad m, MonadThrow m, HasStdin c, HasStdout w, HasStderr w) => MonadConsole (StubT c s w m) where
-  readStdin = asks asStdin
-  writeStdout s = tell $ asStdout s
-  writeStderr s = tell $ asStderr s
+readStdin :: (Monad m, MonadThrow m, MonadReader c m, HasStdin c) => m ByteString
+readStdin = asks asStdin
+
+writeStdout :: (Monad m, MonadThrow m, MonadWriter w m, HasStdout w) => ByteString -> m ()
+writeStdout s = tell $ asStdout s
+
+writeStderr :: (Monad m, MonadThrow m, MonadWriter w m, HasStderr w) => ByteString -> m ()
+writeStderr s = tell $ asStderr s
